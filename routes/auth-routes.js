@@ -3,17 +3,16 @@
 const { authUserJWT, authAdminJWT } = require('../auth/jwt');
 const authController = require('../controllers/auth-controller');
 const Joi = require('joi');
+const { min } = require('../db/db');
 
 module.exports = function(app) {
 
-    app.get('/login', async (req, res) => {
-        console.log('LOGIN HIT!');
+    app.post('/login', async (req, res) => {
         try {
             const { body } = req;
-
             const loginSchema = Joi.object().keys({
                 email: Joi.string().email().required(),
-                password: Joi.string().required(),
+                password: Joi.string().min(8).required(),
             }); 
             const bodyValid = loginSchema.validate(body);
             
@@ -23,9 +22,11 @@ module.exports = function(app) {
                     data: body
                 });
             } else {
-                const token = await authController.login(body);
+                const userData = await authController.login(body);
                 res.json({ message: 'Login Successful!', 
-                    data: token
+                    id: userData.id,
+                    email: userData.email,
+                    token: userData.token
                 });
             }
         } catch (err) {
@@ -34,8 +35,7 @@ module.exports = function(app) {
         }
     });
 
-    app.post('/user', authAdminJWT , async (req, res) => {
-        console.log('USER HIT!');
+    app.put('/user', async (req, res) => {
         try {
             const { body } = req;
             const userSchema = Joi.object().keys({
@@ -70,7 +70,6 @@ module.exports = function(app) {
     });
 
     app.get('/status', (req, res) => {
-        console.log('TEST HIT!');
         res.send('Success');
     });
 }

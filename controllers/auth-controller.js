@@ -10,7 +10,8 @@ module.exports = {
         const isAuthorized = await authService.isUserAuthorized(user);
         if (isAuthorized) {
             const userFound = await authService.findUserByEmail(user.email);
-            return accessToken = jwt.sign({ id: userFound.id, email: userFound.email, role: userFound.role }, accessTokenSecret);
+            const accessToken = jwt.sign({ id: userFound.id, email: userFound.email, role: userFound.role }, accessTokenSecret);
+            return {id: userFound.id, email: userFound.email, token: accessToken };
         } else {
             return null;
         }

@@ -2,11 +2,11 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const boom = require('express-boom');
+const cors = require('cors');
 const app = express();
 const port = 3000;
 
-// app.use(boom);
+app.use(cors());
 app.use(bodyParser.json());
 
 // Add routes

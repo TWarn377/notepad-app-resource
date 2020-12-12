@@ -8,9 +8,7 @@ const USERS_TABLE = 'users';
 
 const encryptPassword = async function (password) {
     try {
-    
         return await bcrypt.hash(password, saltRounds);
-
     } catch (err) {
         throw new Error(err);
     }
@@ -20,7 +18,7 @@ const comparePassword = async function (userInput, password) {
     try {
         let result = false;
 
-        return await bcrypt.compare(userInput, password, );
+        return await bcrypt.compare(userInput, password);
     } catch (err)  {
         throw new Error(err);
     }
